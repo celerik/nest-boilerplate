@@ -1,9 +1,9 @@
 // @packages
 import { Body, Controller, Get, Post } from '@nestjs/common';
+import { DogsService } from './dogs.service';
+import { CreateDogsPayload } from './create-dog.payload';
 
 // @scripts
-import { DogsService } from '@app/dogs/services/dogs/dogs.service';
-import { CreateDogsPayload } from '@app/dogs/payloads/create-dogs.payload';
 
 @Controller('dogs')
 export class DogsController {
