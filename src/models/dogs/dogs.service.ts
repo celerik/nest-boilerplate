@@ -1,6 +1,6 @@
-import { Dog } from '@app/dogs/dtos/dog.interface';
-import { CreateDogsPayload } from '@app/dogs/payloads/create-dogs.payload';
 import { Injectable } from '@nestjs/common';
+import { Dog } from './dog.interface';
+import { CreateDogsPayload } from './create-dog.payload';
 
 @Injectable()
 export class DogsService {
