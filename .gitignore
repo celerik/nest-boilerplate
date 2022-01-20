@@ -1,6 +1,9 @@
 # compiled output
 /dist
 /node_modules
+/postgres_data
+/database_data
+.husky/*
 
 # Logs
 logs
@@ -9,9 +12,13 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
+yarn.lock
+package-lock.json
 
 # OS
 .DS_Store
+.env*
+docker-compose.yml
 
 # Tests
 /coverage
@@ -32,3 +39,31 @@ lerna-debug.log*
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+# ORM config
+!ormconfig.js
+
+# Created by https://www.toptal.com/developers/gitignore/api/sonar,sonarqube
+# Edit at https://www.toptal.com/developers/gitignore?templates=sonar,sonarqube
+
+### Sonar ###
+#Sonar generated dir
+/.sonar/
+
+### SonarQube ###
+# SonarQube ignore files.
+#
+# https://docs.sonarqube.org/display/SCAN/Analyzing+with+SonarQube+Scanner
+# Sonar Scanner working directories
+.sonar/
+.sonarqube/
+.scannerwork/
+
+# http://www.sonarlint.org/commandline/
+# SonarLint working directories, configuration files (including credentials)
+.sonarlint/
+
+# End of https://www.toptal.com/developers/gitignore/api/sonar,sonarqube
+
+# Created by https://www.toptal.com/developers/gitignore/api/sonar,sonarqube
+# Edit at https://www.toptal.com/developers/gitignore?templates=sonar,sonarqube

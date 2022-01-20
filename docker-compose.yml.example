@@ -1,0 +1,26 @@
+version: "3"
+services:
+  celerik-database:
+    container_name: 'postgres_celerik'
+    image: 'postgres:latest'
+    restart: always
+    networks:
+      - back-end-celerik
+    volumes:
+      - celerik-database:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_DB=${DB_DATABASE}
+    ports:
+      - ${DB_PORT}:5432
+#  celerik-redis:
+#    image: "redis:alpine"
+#    networks:
+#      - back-end-celerik
+#    ports:
+#      - ${REDIS_PORT}:6379
+networks:
+  back-end-celerik:
+volumes:
+  celerik-database:

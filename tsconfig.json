@@ -10,10 +10,13 @@
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
-    "rootDir": ".",
     "incremental": true,
     "paths": {
-      "@app/*": ["./src/*"]
+      "@base/*": ["src/*"],
+      "@common/*": ["src/common/*"],
+      "@database/*": ["src/database/*"],
+      "@environments/*": ["src/environments/*"],
+      "@modules/*": ["src/modules/*"]
     }
   }
 }
