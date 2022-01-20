@@ -1,3 +1,4 @@
+/** @packages */
 import {
   Controller,
   Get,
@@ -14,7 +15,6 @@ import {
   Query,
   HttpCode,
 } from '@nestjs/common';
-import { RoleService } from './role.service';
 import {
   ApiBearerAuth,
   ApiBody,
@@ -26,11 +26,14 @@ import {
   ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
-import { QueryDto, ResponseDto } from '@common/dtos';
-import { AuthGuard } from '@nestjs/passport';
-import { PermissionAuthGuard } from '@common/guards';
 import { plainToClass } from 'class-transformer';
+
+/** @application */
+import { QueryDto, ResponseDto } from '@common/dtos';
+import { AuthorizationGuard, PermissionAuthGuard } from '@common/guards';
 import { PermissionAuth } from '@common/decotators';
+
+/** @module */
 import {
   CreateRoleDto,
   ResponsePaginateRolesDto,
@@ -38,7 +41,8 @@ import {
   ResponseRolesDto,
   RoleDto,
   UpdateRoleDto,
-} from '@modules/role/dto';
+} from './dto';
+import { RoleService } from './role.service';
 
 @ApiTags('Roles')
 @ApiBearerAuth()
@@ -60,7 +64,7 @@ export class RoleController {
   @ApiBody({ type: CreateRoleDto })
   @Post()
   @PermissionAuth({ name: 'ADMIN-CREATE' })
-  @UseGuards(AuthGuard(), PermissionAuthGuard)
+  @UseGuards(AuthorizationGuard, PermissionAuthGuard)
   @UsePipes(ValidationPipe)
   async create(@Body() createRole: CreateRoleDto): Promise<ResponseDto> {
     const role: RoleDto = await this.roleService.create(createRole);
@@ -85,7 +89,7 @@ export class RoleController {
   @ApiQuery({ type: QueryDto })
   @Get()
   @PermissionAuth({ name: 'ADMIN-READ' })
-  @UseGuards(AuthGuard(), PermissionAuthGuard)
+  @UseGuards(AuthorizationGuard, PermissionAuthGuard)
   async findPaginate(@Query() query: QueryDto): Promise<ResponseDto> {
     const roles = await this.roleService.findPaginate(query);
     return plainToClass(ResponseDto, {
@@ -108,7 +112,7 @@ export class RoleController {
   })
   @Get('all')
   @PermissionAuth({ name: 'ADMIN-READ' })
-  @UseGuards(AuthGuard(), PermissionAuthGuard)
+  @UseGuards(AuthorizationGuard, PermissionAuthGuard)
   async findAll(): Promise<ResponseDto> {
     const roles = await this.roleService.findAll();
     return plainToClass(ResponseDto, {
@@ -131,7 +135,7 @@ export class RoleController {
   })
   @Get('info/:id')
   @PermissionAuth({ name: 'ADMIN-READ' })
-  @UseGuards(AuthGuard(), PermissionAuthGuard)
+  @UseGuards(AuthorizationGuard, PermissionAuthGuard)
   async findOne(@Param('id', ParseIntPipe) id: number): Promise<ResponseDto> {
     const role = await this.roleService.findOne(id);
     return plainToClass(ResponseDto, {
@@ -155,7 +159,7 @@ export class RoleController {
   @ApiBody({ type: UpdateRoleDto })
   @Patch(':id')
   @PermissionAuth({ name: 'ADMIN-EDIT' })
-  @UseGuards(AuthGuard(), PermissionAuthGuard)
+  @UseGuards(AuthorizationGuard, PermissionAuthGuard)
   @UsePipes(ValidationPipe)
   async update(
     @Param('id', ParseIntPipe) id: number,
@@ -183,7 +187,7 @@ export class RoleController {
   @Delete(':id')
   @HttpCode(204)
   @PermissionAuth({ name: 'ADMIN-DELETE' })
-  @UseGuards(AuthGuard(), PermissionAuthGuard)
+  @UseGuards(AuthorizationGuard, PermissionAuthGuard)
   async remove(@Param('id', ParseIntPipe) id: number): Promise<ResponseDto> {
     const deleteRole = await this.roleService.remove(id);
     if (deleteRole) {

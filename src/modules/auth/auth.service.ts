@@ -1,27 +1,33 @@
+/** @packages */
 import {
   Injectable,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { LoginDto, ResponseLoginDto } from '@modules/auth/dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AuthRepository } from '@modules/auth/auth.repository';
+import { plainToClass, plainToInstance } from 'class-transformer';
 import { JwtService } from '@nestjs/jwt';
-import { compare } from 'bcryptjs';
+
+/** @application */
 import { User } from '@database/entities';
 import { Status } from '@common/enums';
-import { plainToClass } from 'class-transformer';
-import { JwtPayloadInterface } from '@modules/auth/payloads';
+import { TokenService } from '@modules/token/token.service';
 import { SimplifiedRoleDto } from '@modules/role/dto';
 import { SimplifiedPermissionDto } from '@modules/permission/dto';
 import { LoginUserDto } from '@modules/user/dto/login-user.dto';
+
+/** @module */
+import { LoginDto, ResponseLoginDto } from './dto';
+import { JwtPayloadInterface } from './payloads';
+import { AuthRepository } from './auth.repository';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(AuthRepository)
     private readonly authRepository: AuthRepository,
-    private readonly _jwtService: JwtService,
+    private readonly jwtService: JwtService,
+    private readonly _tokensService: TokenService,
   ) {}
 
   async login(loginDto: LoginDto): Promise<ResponseLoginDto> {
@@ -33,12 +39,15 @@ export class AuthService {
     if (!user) {
       throw new NotFoundException('user does not exist');
     }
-    const isMatch = await compare(password, user.password);
+    const isMatch = await user.comparePassword(password);
     if (!isMatch) {
       throw new UnauthorizedException('invalid password');
     }
-    const roles = plainToClass(SimplifiedRoleDto, user.roles);
-    const permissions = plainToClass(SimplifiedPermissionDto, user.permissions);
+    const roles = plainToInstance(SimplifiedRoleDto, user.roles);
+    const permissions = plainToInstance(
+      SimplifiedPermissionDto,
+      user.permissions,
+    );
     const payload: JwtPayloadInterface = {
       id: user.id,
       email: user.email,
@@ -48,12 +57,13 @@ export class AuthService {
       roles,
       permissions,
     };
-    const token = this._jwtService.sign(payload);
+    const token = this.jwtService.sign(payload);
     if (!token) {
       throw new UnauthorizedException(
         'Token not created due to internal error',
       );
     }
+    await this._tokensService.create({ token, user });
     return plainToClass(ResponseLoginDto, {
       user: { ...user, authToken: token },
     });
@@ -86,9 +96,23 @@ export class AuthService {
       roles: [],
       permissions: [],
     };
-    const token = this._jwtService.sign(payload);
+    const token = this.jwtService.sign(payload);
+    await this._tokensService.create({ token, user });
     return plainToClass(ResponseLoginDto, {
       user: { ...user, authToken: token },
     });
+  }
+
+  async logout(userId: number): Promise<void> {
+    const user: User = await this.authRepository.findUser(userId, {
+      status: Status.ACTIVE,
+    });
+    if (!user) {
+      throw new NotFoundException('user does not exist');
+    }
+    const deactivateResponse = await this._tokensService.deactivateAll(user);
+    if (!deactivateResponse) {
+      throw new NotFoundException('Token not deleted due to internal error');
+    }
   }
 }

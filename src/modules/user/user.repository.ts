@@ -1,7 +1,10 @@
+/** @packages */
 import { EntityRepository, Repository } from 'typeorm';
+import { NotFoundException } from '@nestjs/common';
+
+/** @application */
 import { Permission, Role, User } from '@database/entities';
 import { RoleService } from '@modules/role/role.service';
-import { NotFoundException } from '@nestjs/common';
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {

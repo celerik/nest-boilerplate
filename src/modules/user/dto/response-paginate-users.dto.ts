@@ -1,7 +1,10 @@
+/** @packages */
 import { Exclude, Expose } from 'class-transformer';
 import { IsArray, IsNotEmpty, IsNumber } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { UserDto } from '@modules/user/dto';
+
+/** @module */
+import { UserDto } from './index';
 
 @Expose()
 export class PaginateUsersDto {

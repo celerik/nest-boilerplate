@@ -1,6 +1,9 @@
+/** @packages */
 import { Exclude } from 'class-transformer';
 import { IsNotEmpty } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+
+/** @module */
 import { UserDto } from './index';
 
 @Exclude()

@@ -1,3 +1,4 @@
+/** @packages */
 import {
   AfterLoad,
   BaseEntity,
@@ -9,8 +10,12 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Role } from './index';
+
+/** @application */
 import { Status } from '../../common/enums';
+
+/** @module */
+import { Role } from './index';
 
 @Entity('permissions')
 export class Permission extends BaseEntity {

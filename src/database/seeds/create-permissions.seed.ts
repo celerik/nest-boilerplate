@@ -1,4 +1,7 @@
+/** @packages */
 import { Factory, Seeder } from 'typeorm-seeding';
+
+/** @application */
 import { Permission } from '../entities';
 
 export default class CreatePermissionsSeed implements Seeder {

@@ -1,4 +1,4 @@
-import { User } from './User';
-import { Role } from './Role';
-import { Permission } from './Permission';
-export { Permission, Role, User };
+export { User } from './User';
+export { Role } from './Role';
+export { Permission } from './Permission';
+export { Token } from './Token';

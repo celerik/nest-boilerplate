@@ -1,5 +1,8 @@
+/** @packages */
 import { define } from 'typeorm-seeding';
 import Faker from 'faker';
+
+/** @application */
 import { Role } from '../entities';
 
 define(Role, (faker: typeof Faker) => {

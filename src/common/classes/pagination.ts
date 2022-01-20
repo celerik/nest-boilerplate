@@ -1,12 +1,15 @@
+/** @packages */
 import { getRepository, ILike } from 'typeorm';
-import { plainToClass } from 'class-transformer';
+import { plainToClass, plainToInstance } from 'class-transformer';
+
+/** @application */
+import { appRouteApi } from '@base/environments';
 import {
   PaginateDto,
   ParamsPaginateDto,
   ParamsResponsePaginateDto,
   QueryDto,
 } from '@common/dtos';
-import 'dotenv/config';
 
 export class Pagination {
   getParams(query: QueryDto) {
@@ -84,7 +87,6 @@ export class Pagination {
     let prevPage: dataPage = prev;
     let lastPage: dataPage = last;
     if (route) {
-      const base = process.env.APP_ROUTE_API;
       let query = '';
       if (keyword) {
         query = `&keyword=${keyword}`;
@@ -95,14 +97,14 @@ export class Pagination {
       if (status) {
         query = `${query}&status=${status}`;
       }
-      const path = `${base}/${route}`;
+      const path = `${appRouteApi}/${route}`;
       currentPage = `${path}?page=${page}&limit=${take}${query}`;
       nextPage = next ? `${path}?page=${next}&limit=${take}${query}` : next;
       prevPage = prev ? `${path}?page=${prev}&limit=${take}${query}` : prev;
       lastPage = last ? `${path}?page=${last}&limit=${take}${query}` : null;
     }
     return plainToClass(PaginateDto, {
-      items: plainToClass(dto, items),
+      items: plainToInstance(dto, items),
       limit: take,
       total,
       currentPage,

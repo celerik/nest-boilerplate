@@ -1,6 +1,9 @@
+/** @packages */
 import { Factory, Seeder } from 'typeorm-seeding';
-import { Permission, Role } from '../entities';
 import { getRepository } from 'typeorm';
+
+/** @application */
+import { Permission, Role } from '../entities';
 
 export default class CreateRolesSeed implements Seeder {
   public roles = [

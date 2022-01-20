@@ -1,10 +1,15 @@
+/** @packages */
 import { Module } from '@nestjs/common';
-import { PermissionService } from './permission.service';
-import { PermissionController } from './permission.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { PermissionRepository } from '@modules/permission/permission.repository';
+
+/** @application */
 import { Pagination } from '@common/classes';
 import { AuthModule } from '@modules/auth/auth.module';
+
+/** @module */
+import { PermissionController } from './permission.controller';
+import { PermissionRepository } from './permission.repository';
+import { PermissionService } from './permission.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([PermissionRepository]), AuthModule],

@@ -1,5 +1,5 @@
+/** @packages */
 import { PartialType } from '@nestjs/mapped-types';
-import { CreateRoleDto } from './create-role.dto';
 import { ApiProperty } from '@nestjs/swagger';
 import {
   ArrayMinSize,
@@ -9,7 +9,12 @@ import {
   IsString,
   Length,
 } from 'class-validator';
+
+/** @application */
 import { Status } from '../../../common/enums';
+
+/** @module */
+import { CreateRoleDto } from './index';
 
 export class UpdateRoleDto extends PartialType(CreateRoleDto) {
   @ApiProperty({ required: true, minimum: 2, maximum: 150 })

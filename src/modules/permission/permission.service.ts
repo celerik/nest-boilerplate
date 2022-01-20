@@ -1,19 +1,20 @@
+/** @packages */
 import {
   BadRequestException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import {
-  CreatePermissionDto,
-  PermissionDto,
-  UpdatePermissionDto,
-} from '@modules/permission/dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PermissionRepository } from '@modules/permission/permission.repository';
+import { plainToClass, plainToInstance } from 'class-transformer';
+
+/** @application */
 import { Pagination } from '@common/classes';
 import { Permission } from '@database/entities';
-import { plainToClass } from 'class-transformer';
 import { PaginateDto, QueryDto } from '@common/dtos';
+
+/** @module */
+import { CreatePermissionDto, PermissionDto, UpdatePermissionDto } from './dto';
+import { PermissionRepository } from './permission.repository';
 
 @Injectable()
 export class PermissionService {
@@ -49,7 +50,7 @@ export class PermissionService {
 
   async findAll(): Promise<PermissionDto[]> {
     const permissions: Permission[] = await this.findPermissions();
-    return plainToClass(PermissionDto, permissions);
+    return plainToInstance(PermissionDto, permissions);
   }
 
   async findPermissions(): Promise<Permission[]> {
@@ -59,7 +60,7 @@ export class PermissionService {
     if (!permissions) {
       throw new NotFoundException('Permissions not found');
     }
-    return plainToClass(Permission, permissions);
+    return plainToInstance(Permission, permissions);
   }
 
   async findOne(id: number): Promise<PermissionDto> {

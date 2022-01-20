@@ -1,9 +1,12 @@
+/** @packages */
 import { Module } from '@nestjs/common';
-import { databaseProviders } from './database.service';
-import { ConfigModule } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
+
+/** @module */
+import { DatabaseProvider } from './database.provider';
 
 @Module({
-  imports: [...databaseProviders, ConfigModule],
-  exports: [...databaseProviders],
+  imports: [TypeOrmModule, DatabaseProvider],
+  exports: [DatabaseProvider],
 })
 export class DatabaseModule {}

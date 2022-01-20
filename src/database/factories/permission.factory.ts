@@ -1,6 +1,9 @@
-import { Permission } from '../entities';
+/** @packages */
 import { define } from 'typeorm-seeding';
 import Faker from 'faker';
+
+/** @application */
+import { Permission } from '../entities';
 
 define(Permission, (faker: typeof Faker) => {
   const permission = new Permission();

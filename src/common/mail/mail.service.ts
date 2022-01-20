@@ -1,7 +1,10 @@
+/** @packages */
 import { Injectable } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
+
+/** @application */
+import { appName, appRoute } from '@base/environments';
 import { MailDto } from '@common/dtos';
-import 'dotenv/config';
 
 @Injectable()
 export class MailService {
@@ -30,10 +33,8 @@ export class MailService {
 
   async sendUserConfirmation(user: MailDto, token: string): Promise<boolean> {
     try {
-      const route = process.env.APP_ROUTE;
-      const project = process.env.APP_PROJECT;
-      const url = `${route}/auth/confirm?token=${token}`;
-      const subject = `Welcome to ${project}! Confirm your Email - ${project}`;
+      const url = `${appRoute}/auth/confirm?token=${token}`;
+      const subject = `Welcome to ${appName}! Confirm your Email - ${appName}`;
       const template = './confirmation';
       const to = user.email;
       const context = {

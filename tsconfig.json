@@ -14,8 +14,9 @@
     "paths": {
       "@base/*": ["src/*"],
       "@common/*": ["src/common/*"],
-      "@modules/*": ["src/modules/*"],
-      "@database/*": ["src/database/*"]
+      "@database/*": ["src/database/*"],
+      "@environments/*": ["src/environments/*"],
+      "@modules/*": ["src/modules/*"]
     }
   }
 }

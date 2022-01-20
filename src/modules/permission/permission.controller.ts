@@ -1,3 +1,4 @@
+/** @packages */
 import {
   Body,
   Controller,
@@ -13,20 +14,6 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { PermissionService } from '@modules/permission/permission.service';
-import { PermissionAuth } from '@common/decotators';
-import { AuthGuard } from '@nestjs/passport';
-import { PermissionAuthGuard } from '@common/guards';
-import { QueryDto, ResponseDto } from '@common/dtos';
-import { plainToClass } from 'class-transformer';
-import {
-  CreatePermissionDto,
-  PermissionDto,
-  ResponsePaginatePermissionsDto,
-  ResponsePermissionDto,
-  ResponsePermissionsDto,
-  UpdatePermissionDto,
-} from '@modules/permission/dto';
 import {
   ApiBearerAuth,
   ApiBody,
@@ -38,6 +25,23 @@ import {
   ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
+import { plainToClass } from 'class-transformer';
+
+/** @application */
+import { PermissionAuth } from '@common/decotators';
+import { QueryDto, ResponseDto } from '@common/dtos';
+import { AuthorizationGuard, PermissionAuthGuard } from '@common/guards';
+
+/** @module */
+import {
+  CreatePermissionDto,
+  PermissionDto,
+  ResponsePaginatePermissionsDto,
+  ResponsePermissionDto,
+  ResponsePermissionsDto,
+  UpdatePermissionDto,
+} from './dto';
+import { PermissionService } from './permission.service';
 
 @ApiTags('Permissions')
 @ApiBearerAuth()
@@ -59,7 +63,7 @@ export class PermissionController {
   @ApiBody({ type: CreatePermissionDto })
   @Post()
   @PermissionAuth({ name: 'ADMIN-CREATE' })
-  @UseGuards(AuthGuard(), PermissionAuthGuard)
+  @UseGuards(AuthorizationGuard, PermissionAuthGuard)
   @UsePipes(ValidationPipe)
   async create(
     @Body() createPermissionDto: CreatePermissionDto,
@@ -88,7 +92,7 @@ export class PermissionController {
   @ApiQuery({ type: QueryDto })
   @Get()
   @PermissionAuth({ name: 'ADMIN-READ' })
-  @UseGuards(AuthGuard(), PermissionAuthGuard)
+  @UseGuards(AuthorizationGuard, PermissionAuthGuard)
   async getPermissionsPaginate(@Query() query: QueryDto): Promise<ResponseDto> {
     const permissions = await this.permissionService.findPaginate(query);
     return plainToClass(ResponseDto, {
@@ -111,7 +115,7 @@ export class PermissionController {
   })
   @Get('all')
   @PermissionAuth({ name: 'ADMIN-READ' })
-  @UseGuards(AuthGuard(), PermissionAuthGuard)
+  @UseGuards(AuthorizationGuard, PermissionAuthGuard)
   async getPermissions(): Promise<ResponseDto> {
     const permissions: PermissionDto[] = await this.permissionService.findAll();
     return plainToClass(ResponseDto, {
@@ -134,7 +138,7 @@ export class PermissionController {
   })
   @Get('info/:id')
   @PermissionAuth({ name: 'ADMIN-READ' })
-  @UseGuards(AuthGuard(), PermissionAuthGuard)
+  @UseGuards(AuthorizationGuard, PermissionAuthGuard)
   async getPermission(
     @Param('id', ParseIntPipe) id: number,
   ): Promise<ResponseDto> {
@@ -160,7 +164,7 @@ export class PermissionController {
   @ApiBody({ type: UpdatePermissionDto })
   @Patch(':id')
   @PermissionAuth({ name: 'ADMIN-EDIT' })
-  @UseGuards(AuthGuard(), PermissionAuthGuard)
+  @UseGuards(AuthorizationGuard, PermissionAuthGuard)
   @UsePipes(ValidationPipe)
   async update(
     @Param('id', ParseIntPipe) id: number,
@@ -191,7 +195,7 @@ export class PermissionController {
   @Delete(':id')
   @HttpCode(204)
   @PermissionAuth({ name: 'ADMIN-DELETE' })
-  @UseGuards(AuthGuard(), PermissionAuthGuard)
+  @UseGuards(AuthorizationGuard, PermissionAuthGuard)
   async delete(@Param('id', ParseIntPipe) id: number): Promise<ResponseDto> {
     const deletePermission: boolean = await this.permissionService.remove(id);
     if (deletePermission) {

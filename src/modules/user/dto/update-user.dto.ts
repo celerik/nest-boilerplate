@@ -1,5 +1,5 @@
+/** @packages */
 import { PartialType } from '@nestjs/mapped-types';
-import { CreateUserDto } from './create-user.dto';
 import {
   ArrayMinSize,
   IsArray,
@@ -12,7 +12,12 @@ import {
   ValidateIf,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+
+/** @application */
 import { Status } from '../../../common/enums';
+
+/** @module */
+import { CreateUserDto } from './index';
 
 export class UpdateUserDto extends PartialType(CreateUserDto) {
   @ApiProperty({ required: false, minimum: 2, maximum: 150 })

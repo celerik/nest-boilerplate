@@ -1,17 +1,22 @@
+/** @packages */
 import {
   BadRequestException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { RoleRepository } from '@modules/role/role.repository';
+import { plainToClass, plainToInstance } from 'class-transformer';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PermissionService } from '@modules/permission/permission.service';
+
+/** @application */
 import { Pagination } from '@common/classes';
-import { CreateRoleDto, RoleDto, UpdateRoleDto } from '@modules/role/dto';
 import { PaginateDto, QueryDto } from '@common/dtos';
 import { Permission, Role } from '@database/entities';
 import { Status } from '@common/enums';
-import { plainToClass } from 'class-transformer';
+import { PermissionService } from '@modules/permission/permission.service';
+
+/** @module */
+import { CreateRoleDto, RoleDto, UpdateRoleDto } from './dto';
+import { RoleRepository } from './role.repository';
 
 @Injectable()
 export class RoleService {
@@ -58,7 +63,7 @@ export class RoleService {
     if (!roles) {
       throw new NotFoundException('Roles not found');
     }
-    return plainToClass(RoleDto, roles);
+    return plainToInstance(RoleDto, roles);
   }
 
   async findOne(id: number): Promise<RoleDto> {

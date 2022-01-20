@@ -1,7 +1,10 @@
+/** @packages */
 import { Exclude, Expose } from 'class-transformer';
 import { IsArray, IsNotEmpty, IsNumber } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { RoleDto } from '@modules/role/dto';
+
+/** @module */
+import { RoleDto } from './index';
 
 @Expose()
 export class PaginateRolesDto {

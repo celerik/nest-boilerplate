@@ -1,4 +1,7 @@
+/** @packages */
 import { EntityRepository, Repository } from 'typeorm';
+
+/** @application */
 import { Role } from '@database/entities';
 
 @EntityRepository(Role)

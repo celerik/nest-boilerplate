@@ -1,2 +1,1 @@
-import { JwtPayloadInterface } from './jwt-payload.interface';
-export { JwtPayloadInterface };
+export { JwtPayloadInterface } from './jwt-payload.interface';

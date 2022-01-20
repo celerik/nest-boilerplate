@@ -1,3 +1,4 @@
+/** @packages */
 import {
   Controller,
   Get,
@@ -14,7 +15,6 @@ import {
   NotFoundException,
   HttpCode,
 } from '@nestjs/common';
-import { UserService } from './user.service';
 import {
   ApiBearerAuth,
   ApiBody,
@@ -26,6 +26,14 @@ import {
   ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
+import { plainToClass } from 'class-transformer';
+
+/** @application */
+import { PermissionAuth } from '@common/decotators';
+import { QueryDto, ResponseDto } from '@common/dtos';
+import { AuthorizationGuard, PermissionAuthGuard } from '@common/guards';
+
+/** @module */
 import {
   CreateUserDto,
   ResponsePaginateUsersDto,
@@ -33,12 +41,8 @@ import {
   ResponseUsersDto,
   UpdateUserDto,
   UserDto,
-} from '@modules/user/dto';
-import { PermissionAuth } from '@common/decotators';
-import { AuthGuard } from '@nestjs/passport';
-import { PermissionAuthGuard } from '@common/guards';
-import { QueryDto, ResponseDto } from '@common/dtos';
-import { plainToClass } from 'class-transformer';
+} from './dto';
+import { UserService } from './user.service';
 
 @ApiTags('Users')
 @ApiBearerAuth()
@@ -60,7 +64,7 @@ export class UserController {
   @ApiBody({ type: CreateUserDto })
   @Post()
   @PermissionAuth({ name: 'USER-CREATE' })
-  @UseGuards(AuthGuard(), PermissionAuthGuard)
+  @UseGuards(AuthorizationGuard, PermissionAuthGuard)
   @UsePipes(ValidationPipe)
   async create(@Body() createUser: CreateUserDto): Promise<ResponseDto> {
     const user: UserDto = await this.userService.create(createUser);
@@ -85,7 +89,7 @@ export class UserController {
   @ApiQuery({ type: QueryDto })
   @Get()
   @PermissionAuth({ name: 'USER-READ' })
-  @UseGuards(AuthGuard(), PermissionAuthGuard)
+  @UseGuards(AuthorizationGuard, PermissionAuthGuard)
   async findPaginate(@Query() query: QueryDto): Promise<ResponseDto> {
     const users = await this.userService.findPaginate(query);
     return plainToClass(ResponseDto, {
@@ -108,7 +112,7 @@ export class UserController {
   })
   @Get('all')
   @PermissionAuth({ name: 'USER-READ' })
-  @UseGuards(AuthGuard(), PermissionAuthGuard)
+  @UseGuards(AuthorizationGuard, PermissionAuthGuard)
   async findAll(): Promise<ResponseDto> {
     const users: UserDto[] = await this.userService.findAll();
     return plainToClass(ResponseDto, {
@@ -131,7 +135,7 @@ export class UserController {
   })
   @Get('info/:id')
   @PermissionAuth({ name: 'USER-READ' })
-  @UseGuards(AuthGuard(), PermissionAuthGuard)
+  @UseGuards(AuthorizationGuard, PermissionAuthGuard)
   async findOne(@Param('id', ParseIntPipe) id: number): Promise<ResponseDto> {
     const user = await this.userService.findOne(id);
     return plainToClass(ResponseDto, {
@@ -155,7 +159,7 @@ export class UserController {
   @ApiBody({ type: UpdateUserDto })
   @Patch(':id')
   @PermissionAuth({ name: 'USER-EDIT' })
-  @UseGuards(AuthGuard(), PermissionAuthGuard)
+  @UseGuards(AuthorizationGuard, PermissionAuthGuard)
   @UsePipes(ValidationPipe)
   async update(
     @Param('id', ParseIntPipe) id: number,
@@ -183,7 +187,7 @@ export class UserController {
   @Delete(':id')
   @HttpCode(204)
   @PermissionAuth({ name: 'USER-DELETE' })
-  @UseGuards(AuthGuard(), PermissionAuthGuard)
+  @UseGuards(AuthorizationGuard, PermissionAuthGuard)
   async remove(@Param('id', ParseIntPipe) id: number): Promise<ResponseDto> {
     const deleteUser = await this.userService.remove(id);
     if (deleteUser) {

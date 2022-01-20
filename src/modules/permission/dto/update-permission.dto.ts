@@ -1,8 +1,13 @@
+/** @packages */
 import { PartialType } from '@nestjs/mapped-types';
-import { CreatePermissionDto } from './create-permission.dto';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsOptional, IsString, Length } from 'class-validator';
+
+/** @application */
 import { Status } from '../../../common/enums';
+
+/** @module */
+import { CreatePermissionDto } from './index';
 
 export class UpdatePermissionDto extends PartialType(CreatePermissionDto) {
   @ApiProperty({ required: true, minimum: 2, maximum: 150 })

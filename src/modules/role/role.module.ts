@@ -1,11 +1,16 @@
+/** @packages */
 import { Module } from '@nestjs/common';
-import { RoleService } from './role.service';
-import { RoleController } from './role.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { RoleRepository } from '@modules/role/role.repository';
-import { PermissionModule } from '@modules/permission/permission.module';
-import { AuthModule } from '@modules/auth/auth.module';
+
+/** @application */
 import { Pagination } from '@common/classes';
+import { AuthModule } from '@modules/auth/auth.module';
+import { PermissionModule } from '@modules/permission/permission.module';
+
+/** @module */
+import { RoleController } from './role.controller';
+import { RoleRepository } from './role.repository';
+import { RoleService } from './role.service';
 
 @Module({
   imports: [

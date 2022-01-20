@@ -1,3 +1,2 @@
-import { PermissionAuth } from './permission-auth.decorator';
-import { UserAuth } from './user-auth.decorator';
-export { PermissionAuth, UserAuth };
+export { PermissionAuth } from './permission-auth.decorator';
+export { UserAuth } from './user-auth.decorator';

@@ -1,3 +1,4 @@
+/** @packages */
 import {
   Controller,
   Get,
@@ -8,7 +9,6 @@ import {
   ValidationPipe,
   UseGuards,
 } from '@nestjs/common';
-import { AuthService } from './auth.service';
 import {
   ApiBearerAuth,
   ApiInternalServerErrorResponse,
@@ -16,10 +16,15 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { LoginDto, ResponseLoginDto } from '@modules/auth/dto';
-import { LoginUserDto } from '@modules/user/dto/login-user.dto';
-import { AuthGuard } from '@nestjs/passport';
+
+/** @application */
 import { UserAuth } from '@common/decotators';
+import { AuthorizationGuard } from '@common/guards';
+import { LoginUserDto } from '@modules/user/dto';
+
+/** @module */
+import { LoginDto, ResponseLoginDto } from './dto';
+import { AuthService } from './auth.service';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -57,7 +62,7 @@ export class AuthController {
   })
   @ApiBearerAuth()
   @Get('/validate-token')
-  @UseGuards(AuthGuard())
+  @UseGuards(AuthorizationGuard)
   validateToken(@UserAuth('id') userId: number): Promise<LoginUserDto> {
     return this.authService.validateToken(userId);
   }
@@ -75,8 +80,26 @@ export class AuthController {
   })
   @ApiBearerAuth()
   @Get('/refresh-token')
-  @UseGuards(AuthGuard())
+  @UseGuards(AuthorizationGuard)
   refreshToken(@UserAuth('id') userId: number): Promise<ResponseLoginDto> {
     return this.authService.refreshToken(userId);
+  }
+
+  @ApiOperation({
+    summary: 'Logout',
+    description: 'Section for the logout',
+  })
+  @ApiOkResponse({
+    description: 'Logout correctly',
+  })
+  @ApiInternalServerErrorResponse({
+    description: 'Internal server error',
+  })
+  @ApiBearerAuth()
+  @Post('/logout')
+  @HttpCode(204)
+  @UseGuards(AuthorizationGuard)
+  async signOut(@UserAuth('id') userId: number): Promise<void> {
+    await this.authService.logout(userId);
   }
 }

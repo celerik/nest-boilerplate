@@ -1,6 +1,9 @@
+/** @packages */
 import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { Exclude, Expose } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
+
+/** @application */
 import { Status } from '../../../common/enums';
 
 @Exclude()

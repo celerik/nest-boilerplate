@@ -1,2 +1,1 @@
-import { QueryError } from './query-error';
-export { QueryError };
+export { QueryError } from './query-error';

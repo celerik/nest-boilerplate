@@ -1,2 +1,1 @@
-import { PermissionAuthInterface } from './permission-auth.interface';
-export { PermissionAuthInterface };
+export { PermissionAuthInterface } from './permission-auth.interface';

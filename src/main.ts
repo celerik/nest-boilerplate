@@ -1,38 +1,46 @@
+/** @packages */
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
+import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+
+/** @application */
+import {
+  appName,
+  appPrefix,
+  appVersion,
+  isDevelopmentEnv,
+  isLocalEnv,
+  whiteListMethodsHttp,
+  whiteListRoutes,
+} from './environments';
 import { QueryError } from '@common/exceptions';
-import 'dotenv/config';
+
+/** @module */
+import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const routeApp = process.env.APP_ROUTE;
-  const routeAppApi = process.env.APP_ROUTE_API;
-  const environment = process.env.NODE_ENV;
-  const routes =
-    environment === 'development'
-      ? [
-          routeAppApi,
-          routeApp,
-          'http://localhost:8000',
-          'http://localhost:5000',
-          'http://localhost:3000',
-        ]
-      : [routeAppApi, routeApp];
   const app = await NestFactory.create(AppModule);
-  app.setGlobalPrefix('api/v1');
+  app.setGlobalPrefix(`${appPrefix}/${appVersion}`);
   app.enableCors({
-    origin: routes,
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    origin: whiteListRoutes,
+    methods: whiteListMethodsHttp,
     credentials: true,
   });
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      transform: true,
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
+    }),
+  );
   app.useGlobalFilters(new QueryError());
-  if (environment !== 'production') {
-    const APP_NAME = process.env.APP_PROJECT;
-    const APP_VERSION = process.env.npm_package_version;
+  if (isDevelopmentEnv || isLocalEnv) {
     const config = new DocumentBuilder()
-      .setTitle(APP_NAME)
-      .setDescription(`The ${APP_NAME} API description`)
-      .setVersion(APP_VERSION)
+      .setTitle(appName)
+      .setDescription(`The ${appName} API description`)
+      .setVersion(appVersion)
       .addBearerAuth()
       .build();
     const document = SwaggerModule.createDocument(app, config);

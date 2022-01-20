@@ -1,6 +1,9 @@
+/** @packages */
 import { Exclude, Expose } from 'class-transformer';
 import { IsArray, IsNotEmpty, IsNumber } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+
+/** @module */
 import { PermissionDto } from './index';
 
 @Expose()

@@ -1,11 +1,16 @@
+/** @packages */
 import { Module } from '@nestjs/common';
-import { UserService } from './user.service';
-import { UserController } from './user.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserRepository } from '@modules/user/user.repository';
+
+/** @application */
+import { Pagination } from '@common/classes';
 import { RoleModule } from '@modules/role/role.module';
 import { AuthModule } from '@modules/auth/auth.module';
-import { Pagination } from '@common/classes';
+
+/** @module */
+import { UserController } from './user.controller';
+import { UserRepository } from './user.repository';
+import { UserService } from './user.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([UserRepository]), RoleModule, AuthModule],

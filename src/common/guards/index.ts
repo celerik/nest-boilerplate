@@ -1,2 +1,2 @@
-import { PermissionAuthGuard } from './permission-auth.guard';
-export { PermissionAuthGuard };
+export { AuthorizationGuard } from './authorization.guard';
+export { PermissionAuthGuard } from './permission-auth.guard';

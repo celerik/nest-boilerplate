@@ -1,8 +1,11 @@
+/** @packages */
 import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { Exclude, Expose, Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
+
+/** @application */
+import { Status } from '@common/enums';
 import { SimplifiedPermissionDto } from '@modules/permission/dto';
-import { Status } from '../../../common/enums';
 
 @Exclude()
 export class RoleDto {
