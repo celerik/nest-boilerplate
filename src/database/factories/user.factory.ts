@@ -7,7 +7,7 @@ import { User } from '../entities';
 
 define(User, (faker: typeof Faker) => {
   const user = new User();
-  const gender = faker.datatype.number();
+  const gender = Number(faker.random.alphaNumeric(1));
   user.name = faker.name.firstName(gender);
   user.lastname = faker.name.lastName(gender);
   user.username = faker.name.jobTitle();

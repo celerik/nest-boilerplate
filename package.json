@@ -31,10 +31,10 @@
     "seed:run": "ts-node ./node_modules/typeorm-seeding/dist/cli.js seed",
     "seed:clear-run": "npm run schema:drop && npm run migration:run && npm run seed:run",
     "db:run": "npm run migration:revert && npm run migration:run && npm run seed:run",
-    "prepare": "husky install",
     "check-types": "tsc",
-    "pre-commit-lint": "npm run check-types && npx lint-staged",
-    "commit-msg": "npm run pre-commit-lint && npx --no-install commitlint --edit \"$1\""
+    "prepare": "husky install",
+    "pre-commit-lint": "npx husky add .husky/pre-commit 'npx --no-install lint-staged && npm run lint && npm run format && npm run build && git add .'",
+    "commit-msg-lint": "npx husky add .husky/commit-msg 'npx --no-install commitlint --edit \"$1\"'"
   },
   "dependencies": {
     "@nestjs-modules/mailer": "1.6.0",

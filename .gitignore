@@ -3,6 +3,7 @@
 /node_modules
 /postgres_data
 /database_data
+.husky/*
 
 # Logs
 logs
